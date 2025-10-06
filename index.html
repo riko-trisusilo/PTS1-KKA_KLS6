@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penilaian Tengah Semester 1 - KKA Kelas ^ SD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .certificate {
+            border: 15px solid #1e40af;
+            border-image: linear-gradient(45deg, #1e40af, #3b82f6) 1;
+            background: linear-gradient(to bottom right, #eff6ff, #dbeafe);
+            padding: 2.5rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2393c5fd' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .certificate::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            width: 80%;
+            height: 80%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath fill='none' stroke='%231e40af' stroke-width='2' d='M100 20a80 80 0 1 1 0 160 80 80 0 0 1 0-160zm0 10a70 70 0 1 0 0 140 70 70 0 0 0 0-140zm20 60a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10H80a10 10 0 0 1-10-10V100a10 10 0 0 1 10-10h40zm-20 10a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.08;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .certificate > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .developer-info {
+            transition: all 0.5s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .developer-info.open {
+            max-height: 500px;
+        }
+        
+        .school-logo {
+            max-height: 80px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        .community-logo {
+            max-height: 60px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        .developer-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #1e40af;
+            margin: 0 auto 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        #app-container {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .content-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border-radius: 1rem;
+        }
+        
+        .welcome-title {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card h3 {
+            color: #93c5fd;
+        }
+        
+        .feature-card p {
+            color: #e2e8f0;
+        }
+        
+        input, select {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid #475569;
+            color: #f8fafc;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+        }
+        
+        input:focus, select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+            outline: none;
+        }
+        
+        input::placeholder {
+            color: #94a3b8;
+        }
+        
+        .btn {
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #047857);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .option {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 0.5rem;
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        .option.selected {
+            background-color: rgba(59, 130, 246, 0.4);
+            border-color: #3b82f6;
+        }
+        
+        .option.correct {
+            background-color: rgba(34, 197, 94, 0.4);
+            border-color: #22c55e;
+        }
+        
+        .option.incorrect {
+            background-color: rgba(239, 68, 68, 0.4);
+            border-color: #ef4444;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .score-display {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .floating-element {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f59e0b;
+            opacity: 0;
+        }
+        
+        @media (max-width: 640px) {
+            .school-logo {
+                max-height: 60px;
+            }
+            
+            .community-logo {
+                max-height: 45px;
+            }
+            
+            .developer-photo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .certificate::before {
+                width: 90%;
+                height: 90%;
+            }
+            
+            .score-display {
+                font-size: 3rem;
+            }
+        }
+        
+        .certificate-title {
+            font-family: 'Brush Script MT', cursive;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .signature-line {
+            border-top: 2px solid #1e40af;
+            display: inline-block;
+            width: 150px;
+        }
+        
+        .qr-code {
+            border: 2px solid #1e40af;
+            border-radius: 8px;
+            padding: 5px;
+            background: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col py-4">
+    <!-- Header dengan Logo Sekolah dan Komunitas -->
+    <header class="container mx-auto px-4 mb-4">
+        <div class="bg-gray-800 rounded-2xl shadow-lg p-4">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='10' fill='%231e40af'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='12' fill='white' text-anchor='middle'%3ESDN 008%3C/text%3E%3Ctext x='50' y='70' font-family='Arial' font-size='10' fill='white' text-anchor='middle'%3ESamarinda Ulu%3C/text%3E%3C/svg%3E" alt="Logo Sekolah" class="school-logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%233b82f6'/%3E%3Ctext x='50' y='45' font-family='Arial' font-size='12' fill='white' text-anchor='middle'%3EKurikulum%3C/text%3E%3Ctext x='50' y='60' font-family='Arial' font-size='12' fill='white' text-anchor='middle'%3EMerdeka%3C/text%3E%3C/svg%3E" alt="Logo Kumer" class="school-logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='10' fill='%2360a5fa'/%3E%3Ctext x='50' y='45' font-family='Arial' font-size='12' fill='white' text-anchor='middle'%3EKombel%3C/text%3E%3Ctext x='50' y='65' font-family='Arial' font-size='12' fill='white' text-anchor='middle'%3EMANTAP%3C/text%3E%3C/svg%3E" alt="Logo Komunitas Belajar" class="community-logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231e40af'/%3E%3Ctext x='50' y='45' font-family='Arial' font-size='12' fill='white' text-anchor='middle'%3ETutwuri%3C/text%3E%3Ctext x='50' y='65' font-family='Arial' font-size='12' fill='white' text-anchor='middle'%3EHandayani%3C/text%3E%3C/svg%3E" alt="Logo Tutwuri" class="community-logo">
+            </div>
+        </div>
+    
+
+    <!-- Konten Utama Aplikasi -->
+    <main id="app-container" class="container mx-auto px-4 max-w-4xl flex-grow">
+        <!-- Layar Selamat Datang -->
+        <section id="welcomeScreen" class="screen active content-card p-6 md:p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-2 welcome-title">Penilaian Tengah Semester 1</h1>
+                <h2 class="text-xl md:text-2xl font-semibold text-white-300 mb-4">Koding dan Kecerdasan ArtifisialK (KKA) Kelas 6 SD</h2>
+                <p class="text-lg md:text-xl max-w-2xl mx-auto">Selamat datang di aplikasi Penilaian Tengah Semester 1</p>
+                <p class="text-lg md:text-xl max-w-2xl mx-auto">Pelajari materinya, kerjakan soal, dan dapatkan sertifikatnya!</p>
+            </div>
+            
+            <div class="bg-blue-800 bg-opacity-30 rounded-xl p-6 mb-6">
+                <h3 class="text-xl font-bold mb-4 text-blue-300">Informasi Siswa</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
+                        <input type="text" id="studentName" class="w-full p-3 rounded-lg" placeholder="Masukkan nama lengkap" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Kelas</label>
+                        <select id="studentClass" class="w-full p-3 rounded-lg" required>
+                            <option value="">Pilih Kelas</option>
+                            <option value="6A">6A</option>
+                            <option value="6B">6B</option>
+                            <option value="6C">6C</option>
+                            <option value="6D">6D</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="feature-card p-6 text-center">
+                    <div class="floating-element mb-4">
+                        <i class="fas fa-book-open text-4xl text-green-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Materi Pembelajaran</h3>
+                    <p>Pelajari materi dengan penjelasan yang mudah dipahami dan ilustrasi menarik.</p>
+                </div>
+                
+                <div class="feature-card p-6 text-center">
+                    <div class="floating-element mb-4">
+                        <i class="fas fa-pencil-alt text-4xl text-yellow-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Latihan Soal</h3>
+                    <p>Uji pemahamanmu dengan mengerjakan soal interaktif dengan sistem penilaian otomatis.</p>
+                </div>
+                
+                <div class="feature-card p-6 text-center">
+                    <div class="floating-element mb-4">
+                        <i class="fas fa-award text-4xl text-red-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Sertifikat Prestasi</h3>
+                    <p>Dapatkan sertifikat penilaian yang dapat diunduh setelah menyelesaikan soal.</p>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button id="startLearningButton" class="btn btn-primary text-white font-bold py-3 px-8 text-lg">Mulai Belajar <i class="ml-2 fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Layar Materi Pembelajaran -->
+        <section id="materialScreen" class="screen content-card p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-300">Materi Pembelajaran: Permainan Invasi</h2>
+                <button id="backToWelcomeButton" class="btn bg-gray-700 text-gray-200 font-semibold py-2 px-4">Kembali</button>
+            </div>
+            
+            <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-green-400 mb-4">Koding & Kecerdasan Buatan</h1>
+            <p class="text-xl text-gray-300">Materi Pembelajaran untuk Siswa Kelas 6 SD</p>
+            <div class="mt-6 flex justify-center space-x-4">
+                <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">Kurikulum Merdeka</span>
+                <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">Pemrograman Dasar</span>
+                <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">AI untuk Pemula</span>
+            </div>
+        </header>
+
+        <!-- Pengenalan Koding -->
+        <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4 text-green-400">
+                <i class="fas fa-code mr-2"></i>Apa itu Koding?
+            </h2>
+            <p class="mb-4">Koding adalah cara kita memberikan perintah kepada komputer. Seperti ketika kita memberikan instruksi dalam permainan, koding adalah bahasa yang dimengerti komputer.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h4 class="text-lg font-semibold mb-2 text-blue-300">Mengapa Belajar Koding?</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Melatih berpikir logis dan sistematis</li>
+                        <li>Mengembangkan kreativitas</li>
+                        <li>Memecahkan masalah dengan cara yang terstruktur</li>
+                        <li>Mempersiapkan diri untuk masa depan digital</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-2 text-blue-300">Konsep Dasar Koding:</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Urutan (Sequence)</li>
+                        <li>Perulangan (Loop)</li>
+                        <li>Kondisi (If-Else)</li>
+                        <li>Variabel (Variable)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Koding Sederhana: Permainan Olahraga -->
+        <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4 text-green-400">
+                <i class="fas fa-basketball-ball mr-2"></i>Koding untuk Permainan Olahraga
+            </h2>
+            <p class="mb-4">Mari buat program sederhana tentang permainan olahraga menggunakan konsep koding dasar!</p>
+            
+            <div class="interactive-area">
+                <h4 class="text-lg font-semibold mb-2 text-yellow-400">Contoh Kode: Menghitung Skor Permainan</h4>
+                <div class="code-block">
+                    <span class="text-blue-400">// Program menghitung skor permainan</span><br>
+                    <span class="text-purple-400">let</span> <span class="text-yellow-300">skorTimA</span> = <span class="text-green-400">0</span>;<br>
+                    <span class="text-purple-400">let</span> <span class="text-yellow-300">skorTimB</span> = <span class="text-green-400">0</span>;<br><br>
+                    
+                    <span class="text-blue-400">// Fungsi untuk menambah skor</span><br>
+                    <span class="text-purple-400">function</span> <span class="text-yellow-300">tambahSkor</span>(tim) {<br>
+                    &nbsp;&nbsp;<span class="text-purple-400">if</span> (tim === <span class="text-green-400">"A"</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;skorTimA = skorTimA + <span class="text-green-400">1</span>;<br>
+                    &nbsp;&nbsp;} <span class="text-purple-400">else</span> <span class="text-purple-400">if</span> (tim === <span class="text-green-400">"B"</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;skorTimB = skorTimB + <span class="text-green-400">1</span>;<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;<span class="text-yellow-300">tampilkanSkor</span>();<br>
+                    }<br><br>
+                    
+                    <span class="text-blue-400">// Fungsi untuk menampilkan skor</span><br>
+                    <span class="text-purple-400">function</span> <span class="text-yellow-300">tampilkanSkor</span>() {<br>
+                    &nbsp;&nbsp;console.log(<span class="text-green-400">"Skor Tim A: "</span> + skorTimA);<br>
+                    &nbsp;&nbsp;console.log(<span class="text-green-400">"Skor Tim B: "</span> + skorTimB);<br>
+                    }
+                </div>
+                
+                <div class="mt-4">
+                    <button onclick="tambahSkor('A')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2">Tim A Cetak Gol!</button>
+                    <button onclick="tambahSkor('B')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Tim B Cetak Gol!</button>
+                    <button onclick="resetSkor()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded ml-2">Reset Skor</button>
+                </div>
+                
+                <div id="skorDisplay" class="mt-4 p-3 bg-gray-700 rounded">
+                    <p>Skor Tim A: <span id="skorA">0</span></p>
+                    <p>Skor Tim B: <span id="skorB">0</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pengenalan AI -->
+        <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4 text-green-400">
+                <i class="fas fa-robot mr-2"></i>Apa itu Kecerdasan Buatan (AI)?
+            </h2>
+            <p class="mb-4">Kecerdasan Buatan (AI) adalah kemampuan komputer untuk meniru kecerdasan manusia. AI dapat belajar, memecahkan masalah, dan membuat keputusan seperti manusia.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h4 class="text-lg font-semibold mb-2 text-blue-300">Contoh AI dalam Kehidupan:</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Asisten virtual (Siri, Google Assistant)</li>
+                        <li>Rekomendasi video di YouTube</li>
+                        <li>Filter spam di email</li>
+                        <li>Pengenalan wajah di ponsel</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-2 text-blue-300">AI dalam Olahraga:</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Analisis performa pemain</li>
+                        <li>Strategi permainan</li>
+                        <li>Wasit bantuan (VAR)</li>
+                        <li>Prediksi hasil pertandingan</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Sederhana: Permainan Tic-Tac-Toe -->
+        <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4 text-green-400">
+                <i class="fas fa-chess mr-2"></i>AI Sederhana: Permainan Tic-Tac-Toe
+            </h2>
+            <p class="mb-4">Mari buat AI sederhana yang bisa bermain Tic-Tac-Toe (Permainan Lingkaran dan Silang)!</p>
+            
+            <div class="interactive-area">
+                <h4 class="text-lg font-semibold mb-2 text-yellow-400">Permainan Tic-Tac-Toe dengan AI</h4>
+                <p class="mb-2">Kamu (X) vs Komputer (O)</p>
+                
+                <div class="game-container" id="gameBoard">
+                    <!-- Sel permainan akan diisi oleh JavaScript -->
+                </div>
+                
+                <div id="gameStatus" class="mt-4 text-center font-semibold"></div>
+                
+                <button onclick="resetGame()" class="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Mulai Permainan Baru</button>
+            </div>
+            
+            <div class="mt-6">
+                <h4 class="text-lg font-semibold mb-2 text-blue-300">Bagaimana AI Bekerja dalam Permainan Ini?</h4>
+                <p>AI dalam permainan ini menggunakan algoritma sederhana:</p>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li>Pertama, mencari posisi untuk menang</li>
+                    <li>Kedua, menghalangi pemain untuk menang</li>
+                    <li>Ketiga, mengambil posisi strategis (tengah, sudut, atau sisi)</li>
+                    <li>Terakhir, mengambil posisi yang tersedia</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Aktivitas Kelas -->
+        <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4 text-green-400">
+                <i class="fas fa-tasks mr-2"></i>Aktivitas Kelas
+            </h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <h4 class="text-lg font-semibold mb-2 text-yellow-400">1. Diskusi Kelompok: AI dalam Olahraga Favorit</h4>
+                    <p>Bentuk kelompok dan diskusikan bagaimana AI dapat digunakan dalam olahraga favorit kalian. Presentasikan hasil diskusi di depan kelas!</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-2 text-yellow-400">2. Membuat Algoritma Permainan</h4>
+                    <p>Buat algoritma sederhana untuk salah satu gerakan dalam permainan olahraga (contoh: cara melakukan servis dalam bulutangkis). Tuliskan langkah-langkahnya secara berurutan!</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-2 text-yellow-400">3. Proyek Koding Sederhana</h4>
+                    <p>Buat program sederhana menggunakan Scratch atau Blockly yang mensimulasikan salah satu aspek permainan olahraga (contoh: menghitung skor, menentukan pemenang, dll).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Penutup -->
+        <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 text-center">
+            <h3 class="text-xl font-bold mb-4 text-green-400">Selamat Belajar!</h3>
+            <p class="mb-4">Koding dan kecerdasan buatan adalah keterampilan masa depan yang menyenangkan untuk dipelajari. Teruslah berlatih dan jangan takut untuk mencoba hal baru!</p>
+            <div class="flex justify-center space-x-4 text-2xl">
+                <i class="fas fa-laptop-code text-blue-400"></i>
+                <i class="fas fa-brain text-purple-400"></i>
+                <i class="fas fa-gamepad text-green-400"></i>
+                <i class="fas fa-lightbulb text-yellow-400"></i>
+            </div>
+        </div>
+    </div>
+
+
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button id="startQuizButton" class="btn btn-success text-white font-bold py-3 px-8 text-lg">Mulai Latihan Soal <i class="ml-2 fas fa-play"></i></button>
+            </div>
+        </section>
+
+        <!-- Layar Kuis/Latihan Soal -->
+        <section id="quizScreen" class="screen content-card p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-300">Latihan Soal Permainan Invasi</h2>
+                <div class="flex items-center space-x-2">
+                    <span id="questionCounter" class="bg-blue-600 text-white font-bold py-1 px-3 rounded-full">1/10</span>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <div class="flex justify-between text-sm mb-1">
+                    <span>Progress</span>
+                    <span id="progressPercent">10%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill" style="width: 10%"></div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 mb-6">
+                <h3 id="questionText" class="text-xl font-bold mb-6">Pertanyaan akan muncul di sini</h3>
+                
+                <div id="optionsContainer" class="space-y-4">
+                    <!-- Opsi jawaban akan diisi oleh JavaScript -->
+                </div>
+            </div>
+            
+            <div class="flex justify-between">
+                <button id="prevQuestionButton" class="btn bg-gray-600 text-white font-semibold py-2 px-4 disabled:opacity-50" disabled>
+                    <i class="fas fa-arrow-left mr-2"></i>Soal Sebelumnya
+                </button>
+                <button id="nextQuestionButton" class="btn btn-primary text-white font-semibold py-2 px-4">
+                    Soal Berikutnya<i class="ml-2 fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Layar Hasil -->
+        <section id="resultScreen" class="screen content-card p-6 md:p-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 text-blue-300">Hasil Latihan Soal</h2>
+                <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 max-w-md mx-auto">
+                    <div class="score-display mb-2" id="finalScore">0%</div>
+                    <div class="text-lg mb-4" id="scoreMessage">Pesan hasil akan muncul di sini</div>
+                    <div id="studentInfo" class="text-sm text-gray-400"></div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-800 bg-opacity-50 rounded-xl p-6 mb-6">
+                <h3 class="text-xl font-bold mb-4 text-center text-green-400">Ringkasan Jawaban</h3>
+                <div id="answerSummary" class="space-y-4">
+                    <!-- Ringkasan jawaban akan diisi oleh JavaScript -->
+                </div>
+            </div>
+            
+            <div class="text-center space-x-4">
+                <button id="viewCertificateButton" class="btn btn-warning text-white font-bold py-3 px-6 text-lg">
+                    <i class="fas fa-award mr-2"></i>Lihat Sertifikat
+                </button>
+                <button id="retryQuizButton" class="btn btn-primary text-white font-bold py-3 px-6 text-lg">
+                    <i class="fas fa-redo mr-2"></i>Ulangi Latihan
+                </button>
+            </div>
+        </section>
+
+        <!-- Layar Sertifikat -->
+        <section id="sertifikatScreen" class="screen content-card p-4 md:p-6">
+            <div class="flex justify-between items-center mb-4">
+                <button id="backToResultButton" class="btn bg-gray-700 text-gray-200 font-semibold py-2 px-4">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali
+                </button>
+                <button id="printCertificateButton" class="btn btn-primary text-white font-bold py-2 px-4">
+                    <i class="fas fa-print mr-2"></i>Cetak/Simpan
+                </button>
+            </div>
+            <div id="certificateWrapper" class="certificate">
+                <div class="text-center">
+                    <h1 class="text-3xl md:text-5xl font-bold text-yellow-500 certificate-title">Sertifikat Prestasi</h1>
+                    <p class="text-lg md:text-xl mt-6 text-blue-900">Diberikan kepada:</p>
+                    <h2 id="certStudentName" class="text-4xl md:text-6xl font-extrabold my-6 text-blue-800"></h2>
+                    <p class="text-lg md:text-xl text-blue-900">Telah menyelesaikan soal Koding dan Kecerdasan Artifisial (KKA) Penilaian Tengah Semester 1
+                    <h3 id="certTopic" class="text-2xl md:text-4xl font-bold my-4 text-blue-700">Koding dan Kecerdasan Artifisial - (KKA) Kelas 6</h3>
+                    <p class="text-lg md:text-xl text-blue-900">dengan nilai </p>
+                    <p id="certScore" class="text-6xl md:text-8xl font-extrabold my-6 text-green-600"></p>
+                    <div class="flex justify-around items-end mt-16 text-blue-900">
+                        <div class="text-center">
+                            <p class="font-semibold">Kepala Sekolah</p>
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=Kepala%20Sekolah%20SDN%20Teladan%20-%20Telah%20Diverifikasi" alt="QR Code Kepala Sekolah" class="qr-code mx-auto my-2">
+                            <p class="mt-2 signature-line">Dr.Chelda Yuliana,M.Pd</p>
+                        </div>
+                        <div class="text-center">
+                            <p id="certDate" class="mb-4 font-semibold"></p>
+                            <p class="font-semibold">Koordinator KKA</p>
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=Guru%20PJOK%20-%20Telah%20Diverifikasi" alt="QR Code Guru PJOK" class="qr-code mx-auto my-2">
+                            <p class="mt-2 signature-line">Riko Trisusilo,S.Pd.Gr</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer dengan Biodata Pengembang -->
+    <footer class="bg-gray-800 text-white py-6 mt-4">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-4">
+                <button id="toggleDeveloperInfo" class="btn bg-blue-700 hover:bg-blue-600 text-white font-semibold py-2 px-4">
+                    <i class="fas fa-info-circle mr-2"></i>Info Pengembang
+                </button>
+            </div>
+            <div id="developerInfo" class="developer-info max-w-4xl mx-auto text-center">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center p-4">
+                    <div>
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%231e40af'/%3E%3Ctext x='75' y='80' font-family='Arial' font-size='40' fill='white' text-anchor='middle'%3ERIKO%3C/text%3E%3C/svg%3E" alt="Foto Pengembang" class="developer-photo mx-auto">
+                        <h3 class="text-xl font-bold">Riko Trisusilo,S.Pd.Gr</h3>
+                        <p class="text-blue-300">Guru PJOK SDN 008 Samarinda Ulu</p>
+                    </div>
+                    <div class="md:col-span-2 text-left">
+                        <p class="mb-2"><i class="fas fa-graduation-cap mr-2 text-blue-400"></i><strong>Pendidikan:</strong> S1 Pendidikan Kepelatihan Olahraga</p>
+                        <p class="mb-2"><i class="fas fa-envelope mr-2 text-blue-400"></i><strong>Kontak:</strong> rikotrisusilo13@guru.sd.belajar.id</p>
+                        <p class="mb-2"><i class="fas fa-star mr-2 text-blue-400"></i><strong>Versi Aplikasi:</strong> 1.2025</p>
+                        <p><i class="fas fa-map-marker-alt mr-2 text-blue-400"></i><strong>Alamat:</strong> Jl. Kedondong Voorfo, Kota Samarinda</p>
+                        
+                      </div>
+                </div>
+                <div class="mt-6 pt-4 border-t border-gray-700">
+                    <p class="text-sm text-gray-400">Aplikasi ini dikembangkan sebagai bagian dari program pengembangan media pembelajaran digital di SDN 008 Samarinda Ulu.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        
+    
+   
+// Data soal latihan
+const quizQuestions = [
+            // SOAL KODING DASAR (1-10)
+            {
+                question: "Apa yang dimaksud dengan 'koding'?",
+                options: [
+                    "Cara membuat gambar di komputer",
+                    "Bahasa untuk memberikan perintah kepada komputer",
+                    "Jenis permainan online",
+                    "Alat untuk mengetik cepat"
+                ],
+                correctAnswer: 1,
+                explanation: "Koding adalah cara kita memberikan perintah kepada komputer menggunakan bahasa pemrograman."
+            },
+            {
+                question: "Dalam koding, apa fungsi dari 'urutan' (sequence)?",
+                options: [
+                    "Mengulangi perintah beberapa kali",
+                    "Menjalankan perintah berdasarkan kondisi",
+                    "Menjalankan perintah secara berurutan",
+                    "Menyimpan data sementara"
+                ],
+                correctAnswer: 2,
+                explanation: "Urutan (sequence) berarti perintah dijalankan satu per satu secara berurutan dari atas ke bawah."
+            },
+            {
+                question: "Apa yang dilakukan oleh perintah 'if-else' dalam koding?",
+                options: [
+                    "Mengulangi perintah",
+                    "Menyimpan data",
+                    "Memilih perintah berdasarkan kondisi",
+                    "Menampilkan pesan"
+                ],
+                correctAnswer: 2,
+                explanation: "If-else digunakan untuk memilih perintah mana yang akan dijalankan berdasarkan kondisi tertentu."
+            },
+            {
+                question: "Dalam program menghitung skor permainan, apa fungsi dari variabel 'skorTimA'?",
+                options: [
+                    "Menampilkan gambar tim A",
+                    "Menyimpan jumlah poin tim A",
+                    "Menentukan warna seragam tim A",
+                    "Mengatur kecepatan permainan"
+                ],
+                correctAnswer: 1,
+                explanation: "Variabel 'skorTimA' digunakan untuk menyimpan dan melacak jumlah poin yang telah dicetak oleh tim A."
+            },
+            {
+                question: "Apa yang terjadi ketika kita memanggil fungsi 'tambahSkor('A')'?",
+                options: [
+                    "Skor tim B bertambah 1 poin",
+                    "Permainan diulang dari awal",
+                    "Skor tim A bertambah 1 poin",
+                    "Tim A kalah secara otomatis"
+                ],
+                correctAnswer: 2,
+                explanation: "Fungsi 'tambahSkor('A')' akan menambahkan 1 poin ke skor tim A."
+            },
+            {
+                question: "Dalam koding, apa yang dimaksud dengan 'loop'?",
+                options: [
+                    "Perintah untuk berhenti",
+                    "Mengulangi perintah beberapa kali",
+                    "Memilih antara dua pilihan",
+                    "Menyimpan data permanen"
+                ],
+                correctAnswer: 1,
+                explanation: "Loop (perulangan) digunakan untuk mengulangi serangkaian perintah beberapa kali tanpa menulis ulang kode yang sama."
+            },
+            {
+                question: "Mengapa kita perlu belajar koding sejak SD?",
+                options: [
+                    "Karena akan menjadi programmer profesional",
+                    "Untuk melatih berpikir logis dan sistematis",
+                    "Agar bisa membuat game yang rumit",
+                    "Karena diwajibkan oleh sekolah"
+                ],
+                correctAnswer: 1,
+                explanation: "Belajar koding sejak dini membantu melatih cara berpikir logis, sistematis, dan kemampuan memecahkan masalah."
+            },
+            {
+                question: "Apa yang dimaksud dengan 'debugging' dalam koding?",
+                options: [
+                    "Menambahkan fitur baru",
+                    "Mencari dan memperbaiki kesalahan dalam kode",
+                    "Mengganti bahasa pemrograman",
+                    "Mempercepat program"
+                ],
+                correctAnswer: 1,
+                explanation: "Debugging adalah proses mencari, menemukan, dan memperbaiki kesalahan (bug) dalam kode program."
+            },
+            {
+                question: "Dalam program Tic-Tac-Toe, apa yang dilakukan oleh fungsi 'checkWinner()'?",
+                options: [
+                    "Menentukan giliran pemain berikutnya",
+                    "Memeriksa apakah ada pemain yang sudah menang",
+                    "Mengatur ukuran papan permainan",
+                    "Menampilkan animasi kemenangan"
+                ],
+                correctAnswer: 1,
+                explanation: "Fungsi 'checkWinner()' memeriksa kondisi papan untuk menentukan apakah ada pemain yang sudah membentuk garis lengkap."
+            },
+            {
+                question: "Apa keuntungan menggunakan fungsi dalam koding?",
+                options: [
+                    "Program menjadi lebih lambat",
+                    "Kode menjadi lebih panjang",
+                    "Dapat menggunakan kembali kode yang sama",
+                    "Harus menulis ulang kode terus menerus"
+                ],
+                correctAnswer: 2,
+                explanation: "Fungsi memungkinkan kita menulis kode sekali dan menggunakannya berulang kali, membuat program lebih efisien dan terorganisir."
+            },
+
+            // SOAL KECERDASAN BUATAN (11-20)
+            {
+                question: "Apa kepanjangan dari AI?",
+                options: [
+                    "Advanced Internet",
+                    "Artificial Intelligence",
+                    "Automated Information",
+                    "Academic Intelligence"
+                ],
+                correctAnswer: 1,
+                explanation: "AI adalah singkatan dari Artificial Intelligence yang berarti Kecerdasan Buatan."
+            },
+            {
+                question: "Apa yang dimaksud dengan kecerdasan buatan?",
+                options: [
+                    "Robot yang bisa berbicara",
+                    "Komputer yang bisa bermain game",
+                    "Kemampuan mesin untuk meniru kecerdasan manusia",
+                    "Program untuk editing foto"
+                ],
+                correctAnswer: 2,
+                explanation: "Kecerdasan buatan adalah kemampuan komputer atau mesin untuk meniru kecerdasan manusia seperti belajar, memecahkan masalah, dan mengambil keputusan."
+            },
+            {
+                question: "Manakah contoh penggunaan AI dalam kehidupan sehari-hari?",
+                options: [
+                    "Asisten virtual seperti Siri atau Google Assistant",
+                    "Program pengolah kata seperti Microsoft Word",
+                    "Kalkulator scientific",
+                    "Aplikasi kamera biasa"
+                ],
+                correctAnswer: 0,
+                explanation: "Asisten virtual seperti Siri dan Google Assistant menggunakan AI untuk memahami dan merespons perintah suara."
+            },
+            {
+                question: "Dalam permainan Tic-Tac-Toe dengan AI, bagaimana komputer memilih langkah?",
+                options: [
+                    "Secara acak tanpa strategi",
+                    "Selalu memilih pojok kanan atas",
+                    "Menggunakan algoritma untuk menganalisis posisi terbaik",
+                    "Meniru langkah pemain sebelumnya"
+                ],
+                correctAnswer: 2,
+                explanation: "AI dalam Tic-Tac-Toe menggunakan algoritma untuk menganalisis papan dan memilih langkah terbaik berdasarkan strategi."
+            },
+            {
+                question: "Apa manfaat AI dalam bidang olahraga?",
+                options: [
+                    "Menggantikan pemain sepenuhnya",
+                    "Menganalisis performa pemain dan strategi",
+                    "Membuat jadwal pertandingan",
+                    "Menjual tiket pertandingan"
+                ],
+                correctAnswer: 1,
+                explanation: "AI dapat menganalisis data performa pemain, membantu pelatih membuat strategi, dan bahkan membantu wasit dengan teknologi seperti VAR."
+            },
+            {
+                question: "Apa perbedaan utama antara program biasa dan program dengan AI?",
+                options: [
+                    "Program AI lebih berwarna",
+                    "Program AI bisa belajar dan beradaptasi",
+                    "Program AI lebih cepat dijalankan",
+                    "Program AI hanya untuk game"
+                ],
+                correctAnswer: 1,
+                explanation: "Program dengan AI memiliki kemampuan untuk belajar dari data, beradaptasi dengan situasi baru, dan membuat keputusan berdasarkan pola."
+            },
+            {
+                question: "Bagaimana AI dalam permainan Tic-Tac-Toe mengetahui langkah terbaik?",
+                options: [
+                    "Dengan menebak-nebak saja",
+                    "Dengan meminta bantuan pemain",
+                    "Dengan menganalisis semua kemungkinan langkah",
+                    "Dengan mengikuti instruksi manual"
+                ],
+                correctAnswer: 2,
+                explanation: "AI menganalisis papan permainan, mempertimbangkan semua kemungkinan langkah, dan memilih yang memberikan peluang menang terbesar."
+            },
+            {
+                question: "Manakah yang BUKAN contoh penerapan AI?",
+                options: [
+                    "Rekomendasi video di YouTube",
+                    "Filter spam di email",
+                    "Pengenalan wajah di ponsel",
+                    "Kalkulator sederhana untuk penjumlahan"
+                ],
+                correctAnswer: 3,
+                explanation: "Kalkulator sederhana hanya melakukan perhitungan matematis berdasarkan input, tanpa kemampuan belajar atau adaptasi seperti AI."
+            },
+            {
+                question: "Apa yang dimaksud dengan 'machine learning'?",
+                options: [
+                    "Cara komputer belajar dari data",
+                    "Cara membuat mesin baru",
+                    "Program untuk belajar bahasa asing",
+                    "Robot yang bisa berjalan"
+                ],
+                correctAnswer: 0,
+                explanation: "Machine learning adalah bagian dari AI di mana komputer dapat belajar dan meningkatkan performanya dari data tanpa diprogram secara eksplisit."
+            },
+            {
+                question: "Mengapa kita perlu mempelajari AI sejak dini?",
+                options: [
+                    "Karena semua pekerjaan akan digantikan AI",
+                    "Untuk memahami teknologi masa depan dan mengembangkannya dengan bijak",
+                    "Agar bisa membuat robot pribadi",
+                    "Karena itu trend terbaru"
+                ],
+                correctAnswer: 1,
+                explanation: "Mempelajari AI sejak dini membantu kita memahami teknologi masa depan, potensinya, dan bagaimana menggunakannya secara bertanggung jawab."
+            },
+            {
+                question: "Dalam koding, apa yang terjadi jika kita lupa menutup kurung kurawal { }?",
+                options: [
+                    "Program akan berjalan lebih cepat",
+                    "Akan terjadi error atau kesalahan",
+                    "Program akan membuat kurung otomatis",
+                    "Tidak ada pengaruh sama sekali"
+                ],
+                correctAnswer: 1,
+                explanation: "Kurung kurawal yang tidak ditutup akan menyebabkan error karena komputer tidak tahu di mana blok kode berakhir."
+            },
+            {
+                question: "Apa yang dimaksud dengan 'variabel' dalam koding?",
+                options: [
+                    "Tempat untuk menyimpan data sementara",
+                    "Jenis huruf yang digunakan",
+                    "Kecepatan program berjalan",
+                    "Warna tampilan program"
+                ],
+                correctAnswer: 0,
+                explanation: "Variabel adalah tempat penyimpanan sementara dalam memori komputer untuk menyimpan data yang dapat berubah selama program berjalan."
+            },
+            {
+                question: "Bagaimana AI bisa mengenali gambar kucing?",
+                options: [
+                    "Dengan menebak-nebak saja",
+                    "Dengan membaca pikiran pengguna",
+                    "Dengan belajar dari banyak contoh gambar kucing",
+                    "Dengan menanyakan kepada pemilik kucing"
+                ],
+                correctAnswer: 2,
+                explanation: "AI belajar mengenali kucing dengan menganalisis ribuan gambar kucing dan menemukan pola-pola umum yang membedakan kucing dari objek lain."
+            },
+            {
+                question: "Apa yang terjadi jika kita menekan tombol 'Reset Skor' dalam program permainan?",
+                options: [
+                    "Skor kedua tim menjadi 10",
+                    "Permainan berhenti selamanya",
+                    "Skor kedua tim kembali ke 0",
+                    "Hanya skor tim pemenang yang direset"
+                ],
+                correctAnswer: 2,
+                explanation: "Tombol 'Reset Skor' akan mengembalikan skor kedua tim ke nilai awal, yaitu 0-0."
+            },
+            {
+                question: "Mengapa dalam permainan Tic-Tac-Toe, AI lebih sulit dikalahkan daripada pemain pemula?",
+                options: [
+                    "Karena AI selalu curang",
+                    "Karena AI bisa melihat masa depan",
+                    "Karena AI menganalisis semua kemungkinan langkah",
+                    "Karena AI bermain lebih cepat"
+                ],
+                correctAnswer: 2,
+                explanation: "AI menganalisis semua kemungkinan langkah dan hasilnya, sehingga dapat memilih langkah terbaik yang memberikan peluang menang tertinggi."
+            }
+        ];
+
+
+
+
+        // Variabel state aplikasi
+        let currentScreen = 'welcome';
+        let studentName = '';
+        let studentClass = '';
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        // Elemen DOM
+        const screens = document.querySelectorAll('.screen');
+        const studentNameInput = document.getElementById('studentName');
+        const studentClassSelect = document.getElementById('studentClass');
+        
+        const startLearningButton = document.getElementById('startLearningButton');
+        const backToWelcomeButton = document.getElementById('backToWelcomeButton');
+        const startQuizButton = document.getElementById('startQuizButton');
+        const prevQuestionButton = document.getElementById('prevQuestionButton');
+        const nextQuestionButton = document.getElementById('nextQuestionButton');
+        const viewCertificateButton = document.getElementById('viewCertificateButton');
+        const retryQuizButton = document.getElementById('retryQuizButton');
+        const backToResultButton = document.getElementById('backToResultButton');
+        const printCertificateButton = document.getElementById('printCertificateButton');
+        
+        const questionCounter = document.getElementById('questionCounter');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        
+        const finalScore = document.getElementById('finalScore');
+        const scoreMessage = document.getElementById('scoreMessage');
+        const studentInfo = document.getElementById('studentInfo');
+        const answerSummary = document.getElementById('answerSummary');
+        
+        const certStudentName = document.getElementById('certStudentName');
+        const certScore = document.getElementById('certScore');
+        const certDate = document.getElementById('certDate');
+        
+        const toggleDeveloperInfo = document.getElementById('toggleDeveloperInfo');
+        const developerInfo = document.getElementById('developerInfo');
+
+        // Fungsi untuk menampilkan layar tertentu
+        function showScreen(screenName) {
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            document.getElementById(screenName + 'Screen').classList.add('active');
+            currentScreen = screenName;
+            
+            // Scroll ke atas halaman
+            window.scrollTo(0, 0);
+        }
+
+        // Fungsi untuk memuat soal
+        function loadQuestion(index) {
+            const question = quizQuestions[index];
+            questionText.textContent = question.question;
+            questionCounter.textContent = `${index + 1}/${quizQuestions.length}`;
+            
+            // Perbarui progress bar
+            const progress = ((index + 1) / quizQuestions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressPercent.textContent = `${Math.round(progress)}%`;
+            
+            // Kosongkan kontainer opsi
+            optionsContainer.innerHTML = '';
+            
+            // Tambahkan opsi jawaban
+            question.options.forEach((option, optionIndex) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = `option p-4 rounded-lg border-2`;
+                optionElement.textContent = option;
+                
+                // Tandai jika sudah dijawab
+                if (userAnswers[index] !== undefined && userAnswers[index] === optionIndex) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.addEventListener('click', () => {
+                    // Hapus seleksi dari semua opsi
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Tandai opsi yang dipilih
+                    optionElement.classList.add('selected');
+                    userAnswers[index] = optionIndex;
+                    
+                    // Perbarui status tombol navigasi
+                    updateNavigationButtons();
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Perbarui status tombol navigasi
+            updateNavigationButtons();
+        }
+
+        // Fungsi untuk memperbarui status tombol navigasi
+        function updateNavigationButtons() {
+            // Tombol sebelumnya
+            prevQuestionButton.disabled = currentQuestionIndex === 0;
+            
+            // Tombol berikutnya
+            if (currentQuestionIndex === quizQuestions.length - 1) {
+                nextQuestionButton.innerHTML = 'Selesai <i class="ml-2 fas fa-check"></i>';
+            } else {
+                nextQuestionButton.innerHTML = 'Soal Berikutnya <i class="ml-2 fas fa-arrow-right"></i>';
+            }
+        }
+
+        // Fungsi untuk menampilkan hasil
+        function showResults() {
+            // Hitung skor
+            score = 0;
+            quizQuestions.forEach((question, index) => {
+                if (userAnswers[index] === question.correctAnswer) {
+                    score++;
+                }
+            });
+            
+            const percentage = (score / quizQuestions.length) * 100;
+            finalScore.textContent = `${percentage.toFixed(0)}%`;
+            
+            // Tentukan pesan berdasarkan skor
+            if (percentage >= 75) {
+                scoreMessage.textContent = 'Sangat Baik! Kamu menguasai materi.';
+                scoreMessage.className = 'text-lg mb-4 text-green-400 font-semibold';
+            } else if (percentage >= 60) {
+                scoreMessage.textContent = 'Baik! Kamu sudah memahami materi, tapi masih perlu sedikit belajar lagi.';
+                scoreMessage.className = 'text-lg mb-4 text-yellow-400 font-semibold';
+            } else {
+                scoreMessage.textContent = 'Kamu perlu belajar lagi. Jangan menyerah!';
+                scoreMessage.className = 'text-lg mb-4 text-red-400 font-semibold';
+            }
+            
+            // Tampilkan info siswa
+            studentInfo.textContent = `${studentName} - Kelas ${studentClass}`;
+            
+            // Tampilkan ringkasan jawaban
+            answerSummary.innerHTML = '';
+            quizQuestions.forEach((question, index) => {
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'p-4 rounded-lg border-2';
+                
+                const isCorrect = userAnswers[index] === question.correctAnswer;
+                summaryItem.classList.add(isCorrect ? 'border-green-500 bg-green-900 bg-opacity-20' : 'border-red-500 bg-red-900 bg-opacity-20');
+                
+                summaryItem.innerHTML = `
+                    <div class="font-semibold mb-2">${index + 1}. ${question.question}</div>
+                    <div class="mb-1">Jawaban kamu: <span class="${isCorrect ? 'text-green-400' : 'text-red-400'}">${question.options[userAnswers[index]]}</span></div>
+                    ${!isCorrect ? `<div class="mb-1">Jawaban benar: <span class="text-green-400">${question.options[question.correctAnswer]}</span></div>` : ''}
+                `;
+                
+                answerSummary.appendChild(summaryItem);
+            });
+            
+            // Tampilkan efek konfeti jika nilai tinggi
+            if (percentage >= 75) {
+                createConfetti();
+            }
+        }
+
+        // Fungsi untuk menampilkan sertifikat
+        function showCertificate() {
+            certStudentName.textContent = studentName;
+            certScore.textContent = `${((score / quizQuestions.length) * 100).toFixed(0)}%`;
+            
+            // Format tanggal
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            certDate.textContent = `Tanggal: ${now.toLocaleDateString('id-ID', options)}`;
+        }
+
+        // Fungsi untuk membuat efek konfeti
+        function createConfetti() {
+            const colors = ['#f59e0b', '#ef4444', '#10b981', '#3b82f6', '#8b5cf6'];
+            const container = document.getElementById('resultScreen');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.opacity = '1';
+                
+                container.appendChild(confetti);
+                
+                // Animasi konfeti
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
+            }
+        }
+
+        // Fungsi untuk menyimpan/mencetak sertifikat
+        function printCertificate() {
+            html2canvas(document.getElementById('certificateWrapper'), {
+                scale: 2,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Sertifikat-Permainan-Invasi-${studentName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // Event Listeners
+        startLearningButton.addEventListener('click', () => {
+            studentName = studentNameInput.value.trim();
+            studentClass = studentClassSelect.value;
+            
+            if (!studentName || !studentClass) {
+                alert('Harap isi nama lengkap dan pilih kelas terlebih dahulu!');
+                return;
+            }
+            
+            showScreen('material');
+        });
+        
+        backToWelcomeButton.addEventListener('click', () => {
+            showScreen('welcome');
+        });
+        
+        startQuizButton.addEventListener('click', () => {
+            // Reset state kuis
+            currentQuestionIndex = 0;
+            userAnswers = Array(quizQuestions.length).fill(undefined);
+            showScreen('quiz');
+            loadQuestion(currentQuestionIndex);
+        });
+        
+        prevQuestionButton.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        });
+        
+        nextQuestionButton.addEventListener('click', () => {
+            if (userAnswers[currentQuestionIndex] === undefined) {
+                alert('Silakan pilih jawaban terlebih dahulu!');
+                return;
+            }
+            
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                // Selesai mengerjakan soal
+                showScreen('result');
+                showResults();
+            }
+        });
+        
+        viewCertificateButton.addEventListener('click', () => {
+            showScreen('sertifikat');
+            showCertificate();
+        });
+        
+        retryQuizButton.addEventListener('click', () => {
+            if (confirm('Apakah Anda yakin ingin mengulang latihan soal?')) {
+                // Reset state kuis
+                currentQuestionIndex = 0;
+                userAnswers = Array(quizQuestions.length).fill(undefined);
+                showScreen('quiz');
+                loadQuestion(currentQuestionIndex);
+            }
+        });
+        
+        backToResultButton.addEventListener('click', () => {
+            showScreen('result');
+        });
+        
+        printCertificateButton.addEventListener('click', printCertificate);
+        
+        toggleDeveloperInfo.addEventListener('click', () => {
+            developerInfo.classList.toggle('open');
+            if (developerInfo.classList.contains('open')) {
+                toggleDeveloperInfo.innerHTML = '<i class="fas fa-times mr-2"></i>Tutup Info Pengembang';
+            } else {
+                toggleDeveloperInfo.innerHTML = '<i class="fas fa-info-circle mr-2"></i>Info Pengembang';
+            }
+        });
+
+        // Inisialisasi aplikasi
+        showScreen('welcome');
+    </script>
+</body>
+</html>
